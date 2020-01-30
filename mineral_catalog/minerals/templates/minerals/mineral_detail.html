@@ -1,0 +1,38 @@
+{% extends "minerals/layout.html" %}
+{% load mineral_extras %}
+{% load static %}
+
+{% block content %}
+<div class="grid-100 mineral__container">
+    <h1 class="mineral__name"> {{ mineral.name }}</h1>
+        <div class="mineral__image-bg">
+        <img class="mineral__image" src="{% static 'images' %}/{{ mineral.image_filename }}">
+        <p class="mineral__caption">{{ mineral.image_caption }}</p>
+    </div>
+    <div class="mineral__table-container">
+        <table class="mineral__table">
+            {% for field, value in mineral.items %}
+                {% if field == "category" or field == "formula" or field == "color" or field == "crystal_system" %}
+                    <tr>
+                        <td class="mineral__category">{{ field|title|reverse_snake }}</td>
+                        <td>{{ value }}</td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </table>
+    </div>
+    ---
+    <div class="mineral__table-container">
+        <table class="mineral__subtable">
+            {% for field, value in mineral.items %}
+                {% if field != "name" and field != "id" and field != "image_filename" and field != "image_caption" and field != "category" and field != "formula" and field != "color" and field != "crystal_system" %}
+                    <tr>
+                        <td class="mineral__subcategory">{{ field|title|reverse_snake }}</td>
+                        <td>{{ value }}</td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </table>
+    </div>
+</div>
+{% endblock %}

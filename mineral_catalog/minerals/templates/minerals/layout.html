@@ -1,0 +1,81 @@
+{% load static from staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Jonathan's Minerals: A magnificant catalog of minerals</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Work+Sans:400,500' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Cousine' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="{% static 'css/global.css' %}">
+</head>
+<body>
+  <div class="bounds">
+    <div class="grid-100">
+        <a href="{% url 'minerals:list' %}">
+                <svg class="logo" viewBox="0 0 127.6 84.8" preserveAspectRation="xMinYMin meet">
+                <polygon points="42.7,84.8 49.6,79.4 40,62.5 51.2,43.5 51.2,43.5 25,0 0,55.6 "/>
+                <polygon class="logo--middle" points="52.9,79.5 52.9,79.5 84.8,80.1 59.7,35 43.3,62.4 "/>
+                <polygon points="127.6,61.4 127.6,61.4 110.3,13.5 110.3,13.5 70.3,48.1 70.3,48.1 88.3,80.5 95.3,81.4 95.3,81.4 "/>
+            </svg>
+            <h1 class="logo__name text-centered">Jonathan's Minerals</h1>
+        </a>
+        <p class="logo__text text-centered">Rocks and Minerals: The Oldest Storytellers - A.D. Posey</p>
+    </div>
+    <section class="">
+        <form action="{% url 'minerals:search' %}" method="GET">
+            <input type="text" name="q">
+            <button type="submit" class="">Search</button>
+        </form>
+    </section>
+    <div class="catalog">
+        <h1 class="catalog">Mineral Catalog:</h1>
+        <h2 class="catalog">{{ group }}</h2>
+        {% if special %}
+            <h2 class="catalog">{{ special }}</h2>
+        {% endif %}
+    </div>
+    <div class="letterlist">
+        {% if group == None %}
+        <a href="{% url 'minerals:list' %}" class="morebutton"><b>ALL</b></a> |
+        {% else %}
+            <a href="{% url 'minerals:list' %}" class="button">ALL</a> |
+        {% endif %}
+        {% for letter in alphabet_list %}
+            {% if letter != 'Q' and letter != 'Y' %}
+                {% if letter == group %}
+                    <b>{{ letter }}</b>
+                {% else %}
+                    <a href="{% url 'minerals:letterlist' letter=letter %}" class="button">{{ letter }}</a>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+    </div>
+    <div class="grouplist">
+        {% for m in groups %}
+            {% if m == group %}
+                <b>{{ m }}</b> | 
+            {% else %}
+                <a href="{% url 'minerals:group' group=m %}" class="button">{{ m }}</a> | 
+            {% endif %}
+        {% endfor %}
+    </div>
+    <div class="grouplist">
+        {% for i in more %}
+            {% if i == group %}
+                <a href="{% url 'minerals:more' group=i %}" class="morebutton"><b>{{ i }}</b></a> | 
+            {% else %}
+                <a href="{% url 'minerals:more' group=i %}" class="button">{{ i }}</a> | 
+            {% endif %}
+        {% endfor %}
+    </div>
+        {% block content %}{% endblock %}
+    </div>  
+    <div class="minerals__random">
+        <a class="minerals__anchor" href="{% url 'minerals:detail' pk=random_mineral.pk %}">Show Random Mineral</a>
+    </div>
+</body>
+</html>
